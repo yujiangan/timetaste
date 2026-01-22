@@ -1,0 +1,21 @@
+{
+  "setting": {
+    "enableTypeScript": true,  
+    "useCompilerPlugins": ["typescript"], 
+    "enableEs6": true,  
+    "checkInvalidKey": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "compileType": "miniprogram",
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "appid": "wxafc3f5a673f217ee",
+  "editorSetting": {}
+}
