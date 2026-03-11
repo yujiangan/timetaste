@@ -1,0 +1,122 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">菜单管理</text>
+  </view>
+
+  <!-- 上传菜单区域 -->
+  <view class="upload-section" wx:if="{{!showResult}}">
+    <view class="upload-tip">
+      <text class="tip-text">上传菜单优化 AI 推荐结果</text>
+    </view>
+    <view class="upload-area {{showResult ? 'disabled' : ''}}" bindtap="{{showResult ? '' : 'onUploadTap'}}">
+      <text class="upload-icon">📷</text>
+      <text class="upload-text">点击上传或拍照</text>
+      <text class="upload-hint">支持 JPG、PNG 格式，最大 5MB</text>
+    </view>
+  </view>
+
+  <!-- AI识别加载态 -->
+  <view class="loading-card" wx:if="{{showLoading}}">
+    <view class="loading-content">
+      <view class="loading-spinner">
+        <view class="spinner-circle"></view>
+      </view>
+      <text class="loading-text">AI 正在识别菜单～</text>
+    </view>
+  </view>
+
+  <!-- 识别结果卡片 -->
+  <view class="result-card" wx:if="{{showResult}}">
+    <view class="result-header">
+      <text class="result-title">AI识别结果</text>
+      <text class="result-subtitle">识别成功</text>
+    </view>
+    
+    <view class="result-body">
+      <view class="result-row">
+        <text class="result-label">餐厅名称</text>
+        <text class="result-value">{{resultData.restaurantName || '未识别到菜馆'}}</text>
+      </view>
+      
+      <view class="result-dishes-section" wx:if="{{resultData.dishes && resultData.dishes.length > 0}}">
+        <text class="result-label">菜品列表</text>
+        <view class="dish-list">
+          <block wx:for="{{resultData.dishes}}" wx:key="index">
+            <view class="dish-item">
+              <text class="dish-name">{{item.name}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+      
+      <view class="result-tip">
+        <text class="tip-icon">💡</text>
+        <text class="tip-text">提示：如果识别结果不准确，您可以重新上传更清晰的菜单图片</text>
+      </view>
+    </view>
+    
+    <view class="result-actions">
+      <view class="action-btn secondary" bindtap="onReUploadTap">重新上传</view>
+      <view class="action-btn primary" bindtap="onConfirmSaveTap">确认保存</view>
+    </view>
+  </view>
+
+  <!-- 已保存菜单区域 -->
+  <view class="saved-section">
+    <view class="section-header">
+      <text class="section-title">已保存菜单</text>
+    </view>
+    <block wx:if="{{menuList.length > 0}}">
+      <view class="menu-list">
+        <block wx:for="{{menuList}}" wx:key="id">
+          <view class="menu-item">
+            <image class="menu-image" src="{{item.menuImage}}" mode="aspectFill" binderror="onImageError" data-index="{{index}}"></image>
+            <view class="menu-text-area">
+              <text class="menu-name">{{item.restaurantName}}</text>
+              <text class="menu-dishes">{{item.dishDisplay}}</text>
+              <text class="menu-meta">共{{item.dishCount}}道菜</text>
+            </view>
+            <view class="menu-delete" bindtap="onDeleteMenu" data-id="{{item.id}}">×</view>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-icon">📋</text>
+        <text class="empty-text">还没有保存菜单</text>
+        <text class="empty-hint">上传菜单让AI更好地了解您的选择</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 权限拒绝弹窗 -->
+  <view class="modal-mask {{showPermissionModal ? 'show' : ''}}">
+    <view class="modal-content">
+      <text class="modal-title">需要授权</text>
+      <text class="modal-desc">需开启相机/相册权限才能上传，是否前往设置？</text>
+      <view class="modal-buttons">
+        <view class="modal-btn cancel" bindtap="onCancelPermissionTap">取消</view>
+        <view class="modal-btn confirm" bindtap="onGoSettingsTap">前往设置</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 错误提示弹窗 -->
+  <view class="modal-mask {{showErrorModal ? 'show' : ''}}">
+    <view class="modal-content">
+      <text class="modal-title">提示</text>
+      <text class="modal-desc">{{errorMessage}}</text>
+      <view class="modal-buttons">
+        <view class="modal-btn cancel" bindtap="onCloseErrorTap">取消</view>
+        <view class="modal-btn confirm" bindtap="onRetryTap">重新选图</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 保存成功弹窗 -->
+  <view class="toast {{showSuccessToast ? 'show' : ''}}">
+    <text class="toast-text">菜单保存成功啦～</text>
+  </view>
+</view>

@@ -1,11 +1,54 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/home/home",
+    "pages/menu/menu",
+    "pages/history/history",
+    "pages/about/about"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "吃什么",
-    "navigationBarTextStyle": "black"
-  }
+    "navigationBarBackgroundColor": "#FF6B35",
+    "navigationBarTitleText": "食刻",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF6B35",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home.png"
+      },
+      {
+        "pagePath": "pages/menu/menu",
+        "text": "菜单",
+        "iconPath": "assets/icons/menu.png",
+        "selectedIconPath": "assets/icons/menu.png"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "历史",
+        "iconPath": "assets/icons/history.png",
+        "selectedIconPath": "assets/icons/history.png"
+      },
+      {
+        "pagePath": "pages/about/about",
+        "text": "关于",
+        "iconPath": "assets/icons/about.png",
+        "selectedIconPath": "assets/icons/about.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "获取您的位置信息以提供更精准的餐饮推荐"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation"
+  ]
 }

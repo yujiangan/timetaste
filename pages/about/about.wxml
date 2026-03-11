@@ -1,0 +1,77 @@
+<view class="container">
+  <!-- 顶部展示模块 -->
+  <view class="intro-section">
+    <view class="intro-header">
+      <text class="intro-title">今天吃什么</text>
+      <text class="intro-subtitle">AI 智能美食推荐助手</text>
+    </view>
+    <view class="intro-desc">
+      <text>让AI帮您解决"今天吃什么"的难题</text>
+    </view>
+  </view>
+
+  <!-- 核心功能 -->
+  <view class="feature-section">
+    <view class="section-title">核心功能</view>
+    
+    <view class="feature-card">
+      <text class="feature-icon">🎲</text>
+      <view class="feature-content">
+        <text class="feature-name">AI智能推荐</text>
+        <text class="feature-desc">点击骰子按钮，AI会根据当前时间、您的历史偏好等上下文信息，为您推荐最合适的美食选择。</text>
+      </view>
+    </view>
+
+    <view class="feature-card">
+      <text class="feature-icon">📷</text>
+      <view class="feature-content">
+        <text class="feature-name">菜单上传</text>
+        <text class="feature-desc">拍照或上传菜单截图，AI会自动识别菜品信息，帮助您建立个人菜单库。</text>
+      </view>
+    </view>
+
+    <view class="feature-card">
+      <text class="feature-icon">🧠</text>
+      <view class="feature-content">
+        <text class="feature-name">偏好记忆</text>
+        <text class="feature-desc">系统会记住您的选择偏好，不断优化推荐算法，让推荐越来越符合您的口味。</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 常见问题 -->
+  <view class="faq-section">
+    <view class="section-title">常见问题</view>
+    
+    <block wx:for="{{faqList}}" wx:key="index">
+      <view class="faq-item {{currentIndex === index ? 'active' : ''}}" bindtap="onFaqTap" data-index="{{index}}">
+        <view class="faq-question-row">
+          <text class="faq-title">{{item.question}}</text>
+          <text class="faq-arrow {{currentIndex === index ? 'active' : ''}}">❮</text>
+        </view>
+        <view class="faq-content {{currentIndex === index ? 'show' : ''}}">
+          <text class="faq-text">{{item.answer}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-section">
+    <view class="version-label">版本信息</view>
+    <view class="version-text">当前版本: v1.0.0</view>
+    <view class="feedback-btn" bindtap="onFeedbackTap">💬 意见反馈</view>
+  </view>
+
+  <!-- 意见反馈弹窗 -->
+  <view class="modal-mask {{showModal ? 'show' : ''}}" bindtap="onCloseModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">意见反馈</view>
+      <textarea class="feedback-input" placeholder="请输入您的意见或建议：" bindinput="onInputChange" value="{{feedbackText}}"></textarea>
+      <view class="modal-buttons">
+        <view class="modal-btn cancel" bindtap="onCloseModal">取消</view>
+        <view class="modal-btn confirm" bindtap="onSubmitFeedback">确定</view>
+      </view>
+    </view>
+  </view>
+</view>

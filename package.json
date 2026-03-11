@@ -1,5 +1,5 @@
 {
-  "name": "eat-what",
+  "name": "timetaste",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,6 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "miniprogram-api-typings": "^5.0.0"
+    "miniprogram-api-typings": "^5.1.1"
   }
 }

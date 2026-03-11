@@ -1,0 +1,249 @@
+/* 关于页面样式 */
+page {
+  background: #FFF8F3;
+  min-height: 100vh;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部展示模块 */
+.intro-section {
+  margin: 32rpx;
+  padding: 60rpx 32rpx;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8C5A 100%);
+  border-radius: 24rpx;
+}
+
+.intro-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.intro-title {
+  font-size: 48rpx;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12rpx;
+}
+
+.intro-subtitle {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.intro-desc {
+  text-align: center;
+}
+
+.intro-desc text {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 核心功能 */
+.feature-section {
+  margin: 20rpx 32rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+/* 功能卡片 */
+.feature-card {
+  display: flex;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.feature-icon {
+  font-size: 48rpx;
+  margin-right: 20rpx;
+}
+
+.feature-content {
+  flex: 1;
+}
+
+.feature-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.feature-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 常见问题 */
+.faq-section {
+  margin: 20rpx 32rpx;
+}
+
+.faq-item {
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+  border: 2rpx solid #E8E8E8;
+}
+
+.faq-item.active {
+  border-color: #FF6B35;
+}
+
+.faq-question-row {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+}
+
+.faq-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.faq-arrow {
+  font-size: 24rpx;
+  color: #999;
+  transition: transform 0.5s ease;
+  transform: rotate(-90deg);
+}
+
+.faq-arrow.active {
+  transform: rotate(90deg);
+}
+
+.faq-content {
+  display: none;
+  padding: 0 24rpx 24rpx;
+}
+
+.faq-content.show {
+  display: block;
+}
+
+.faq-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 版本信息 */
+.version-section {
+  margin: 20rpx 32rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  border: 2rpx solid #E8E8E8;
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.version-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.version-text {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 24rpx;
+}
+
+.feedback-btn {
+  padding: 16rpx 40rpx;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8C5A 100%);
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  color: #fff;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-mask.show {
+  display: flex;
+}
+
+.modal-content {
+  width: 80%;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.feedback-input {
+  width: 100%;
+  height: 200rpx;
+  border: 2rpx solid #E8E8E8;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+
+.modal-btn {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  margin: 0 12rpx;
+}
+
+.modal-btn.cancel {
+  background: #F5F5F5;
+  color: #666;
+}
+
+.modal-btn.confirm {
+  background: #FF6B35;
+  color: #fff;
+}
