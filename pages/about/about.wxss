@@ -178,6 +178,12 @@ page {
   border-radius: 16rpx;
   font-size: 24rpx;
   color: #fff;
+  border: none;
+  line-height: 1.5;
+}
+
+.feedback-btn::after {
+  border: none;
 }
 
 /* 弹窗 */

@@ -60,18 +60,6 @@
   <view class="version-section">
     <view class="version-label">版本信息</view>
     <view class="version-text">当前版本: v1.0.0</view>
-    <view class="feedback-btn" bindtap="onFeedbackTap">💬 意见反馈</view>
-  </view>
-
-  <!-- 意见反馈弹窗 -->
-  <view class="modal-mask {{showModal ? 'show' : ''}}" bindtap="onCloseModal">
-    <view class="modal-content" catchtap="stopPropagation">
-      <view class="modal-title">意见反馈</view>
-      <textarea class="feedback-input" placeholder="请输入您的意见或建议：" bindinput="onInputChange" value="{{feedbackText}}"></textarea>
-      <view class="modal-buttons">
-        <view class="modal-btn cancel" bindtap="onCloseModal">取消</view>
-        <view class="modal-btn confirm" bindtap="onSubmitFeedback">确定</view>
-      </view>
-    </view>
+    <button class="feedback-btn" open-type="feedback">💬 意见反馈</button>
   </view>
 </view>
