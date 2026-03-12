@@ -1,0 +1,68 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">历史记录</text>
+  </view>
+
+  <!-- 历史选择记录标题 -->
+  <view class="section-header">
+    <text class="section-title">历史选择记录</text>
+    <view class="clear-btn {{historyList.length > 0 ? 'active' : ''}}" bindtap="onDeleteTap">
+      <text class="clear-text">清空记录</text>
+    </view>
+  </view>
+
+  <!-- 有记录时显示分组列表 -->
+  <block wx:if="{{historyList.length > 0}}">
+    <block wx:for="{{groupedHistory}}" wx:key="label">
+      <view class="history-group">
+        <view class="group-label">
+          <text>{{item.label}}</text>
+        </view>
+        <view class="history-list">
+          <block wx:for="{{item.items}}" wx:for-item="historyItem" wx:key="timestamp">
+            <view class="history-item">
+              <image class="history-emoji" src="{{historyItem.imageUrl}}" mode="aspectFill" wx:if="{{historyItem.imageUrl}}"></image>
+              <text class="history-emoji" wx:else>🍽️</text>
+              <view class="history-info">
+                <text class="history-name">{{historyItem.name}}</text>
+                <view class="history-detail">
+                  <view class="history-status {{historyItem.status === 'adopted' ? 'adopted' : 'skipped'}}">
+                    {{historyItem.status === 'adopted' ? '采纳' : '跳过'}}
+                  </view>
+                  <view class="history-tags" wx:if="{{historyItem.tags}}">
+                    <block wx:for="{{historyItem.tags}}" wx:for-item="tag" wx:key="*this">
+                      <text class="history-tag-item">{{tag}}</text>
+                    </block>
+                  </view>
+                </view>
+              </view>
+              <text class="history-time">{{historyItem.time}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </block>
+
+  <!-- 空状态 -->
+  <block wx:else>
+    <view class="empty-state">
+      <text class="empty-icon">📝</text>
+      <text class="empty-text">暂无历史选择记录</text>
+      <text class="empty-hint">开始使用AI推荐功能，这里会显示您的选择历史</text>
+    </view>
+  </block>
+
+  <!-- 删除确认弹窗 -->
+  <view class="modal-mask {{showDeleteModal ? 'show' : ''}}">
+    <view class="modal-content">
+      <text class="modal-title">确定要清空所有历史记录吗？</text>
+      <text class="modal-desc">删除后无法恢复哦～</text>
+      <view class="modal-buttons">
+        <view class="modal-btn cancel" bindtap="onCancelDeleteTap">取消</view>
+        <view class="modal-btn confirm" bindtap="onConfirmDeleteTap">确认删除</view>
+      </view>
+    </view>
+  </view>
+</view>

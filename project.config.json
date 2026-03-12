@@ -4,37 +4,11 @@
     "useCompilerPlugins": [
       "typescript"
     ],
-    "enableEs6": true,
-    "checkInvalidKey": true,
-    "babelSetting": {
-      "ignore": [],
-      "disablePlugins": [],
-      "outputPath": ""
-    },
-    "es6": false,
-    "postcss": false,
-    "compileWorklet": false,
-    "minified": false,
-    "uglifyFileName": false,
     "uploadWithSourceMap": true,
-    "enhance": false,
-    "packNpmManually": false,
-    "packNpmRelationList": [],
     "minifyWXSS": true,
-    "minifyWXML": true,
-    "localPlugins": false,
-    "disableUseStrict": false,
-    "condition": false,
-    "swc": false,
-    "disableSWC": true
+    "minifyWXML": true
   },
   "compileType": "miniprogram",
-  "simulatorPluginLibVersion": {},
-  "packOptions": {
-    "ignore": [],
-    "include": []
-  },
-  "appid": "wxafc3f5a673f217ee",
-  "editorSetting": {},
+  "appid": "wx5485c394e2347ef8",
   "libVersion": "3.14.0"
 }

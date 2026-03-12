@@ -1,9 +1,2 @@
-App({
-  onLaunch() {
-    // 小程序启动时执行
-    console.log('小程序启动');
-  },
-  globalData: {
-    userInfo: null as any
-  }
-});
+// 小程序全局配置文件
+App({});

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+miniprogram_npm/
+.idea/
+.vscode/
+*.log
+*.tmp
+.DS_Store
+*.md
+env.js

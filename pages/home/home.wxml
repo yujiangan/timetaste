@@ -1,0 +1,114 @@
+<scroll-view class="container" scroll-y>
+  <!-- 大横幅区域 -->
+  <view class="banner">
+    <view class="banner-bg">
+    </view>
+    <view class="banner-content">
+      <text class="banner-title">今天吃什么</text>
+      <text class="banner-subtitle">AI 智能美食推荐</text>
+    </view>
+  </view>
+
+  <!-- AI智能推荐功能区域 -->
+  <view class="feature-section">
+    <view class="feature-title">AI智能推荐</view>
+
+    <!-- 三个实现步骤 -->
+    <view class="steps">
+      <view class="step">
+        <text class="step-icon">🎲</text>
+        <text class="step-text">点击骰子</text>
+      </view>
+      <view class="step-arrow">→</view>
+      <view class="step">
+        <text class="step-icon">🤔</text>
+        <text class="step-text">AI思考</text>
+      </view>
+      <view class="step-arrow">→</view>
+      <view class="step">
+        <text class="step-icon">🍽️</text>
+        <text class="step-text">获得推荐</text>
+      </view>
+    </view>
+
+    <!-- 骰子按钮 -->
+    <view class="dice-button {{isAnimating ? 'animating' : ''}}" bindtap="onDiceTap">
+      <text class="dice-icon">🎲</text>
+    </view>
+  </view>
+
+  <!-- 加载卡片 -->
+  <view class="loading-card {{showLoading ? 'show' : ''}}">
+    <view class="loading-text">{{loadingText}}</view>
+    <view class="loading-spinner">
+      <view class="spinner-circle"></view>
+    </view>
+  </view>
+
+  <!-- 推荐卡片 -->
+  <view class="result-card {{showResult ? 'show' : ''}} {{isCardVisible ? '' : 'card-hidden'}}">
+    <!-- 上层：左侧图片，右侧三层文字 -->
+    <view class="result-upper">
+      <image class="result-image" src="{{resultImage}}" mode="aspectFill" wx:if="{{resultImage}}" binderror="onImageError"></image>
+      <view class="result-image" wx:else>🍽️</view>
+      <view class="result-info">
+        <view class="result-name">{{resultName}}</view>
+        <view class="result-tags">
+          <text class="result-tag">{{resultCategory}}</text>
+          <text class="result-tag">{{resultTaste}}</text>
+        </view>
+        <view class="result-reason">{{resultReason}}</view>
+      </view>
+    </view>
+    <!-- 下层：两个按钮 -->
+    <view class="result-actions">
+      <view class="action-btn confirm" bindtap="onConfirmTap">就这个</view>
+      <view class="action-btn next" bindtap="onNextTap">下一个</view>
+    </view>
+  </view>
+
+  <!-- 异常提示卡片 -->
+  <view class="error-card {{showError ? 'show' : ''}}">
+    <view class="error-title">{{errorTitle}}</view>
+    <view class="error-desc">{{errorDesc}}</view>
+    <view class="error-actions">
+      <view class="action-btn retry" style="flex: none; width: 100%;" bindtap="onRetryTap">重试推荐</view>
+    </view>
+  </view>
+
+  <!-- 历史推荐区域 -->
+  <view class="history-section">
+    <view class="section-title">历史推荐</view>
+    <block wx:if="{{historyList.length > 0}}">
+      <view class="history-list">
+        <block wx:for="{{historyList}}" wx:key="index">
+          <view class="history-item">
+            <image class="history-emoji" src="{{item.imageUrl}}" mode="aspectFill" wx:if="{{item.imageUrl}}"></image>
+            <text class="history-emoji" wx:else>🍽️</text>
+            <view class="history-info">
+              <text class="history-name">{{item.name}}</text>
+              <view class="history-detail">
+                <view class="history-status {{item.status === 'adopted' ? 'adopted' : 'skipped'}}">
+                  {{item.status === 'adopted' ? '✓ 采纳' : '○ 跳过'}}
+                </view>
+                <view class="history-tags">
+                  <block wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">
+                    <text class="history-tag-item">{{tag}}</text>
+                  </block>
+                </view>
+              </view>
+            </view>
+            <text class="history-time">{{item.time}}</text>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-icon">🍽️</text>
+        <text class="empty-text">还没有推荐记录</text>
+        <text class="empty-hint">点击骰子开始你的美食之旅</text>
+      </view>
+    </block>
+  </view>
+</scroll-view>

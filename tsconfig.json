@@ -2,30 +2,13 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
-    "lib": ["ES6"],
-    "allowJs": true,
-    "checkJs": false,
-    "jsx": "preserve",
-    "declaration": false,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "rootDir": "./",
+    "lib": ["ES2017"],
     "strict": true,
-    "noImplicitAny": false,
-    "baseUrl": "./",
-    "paths": {},
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["miniprogram-api-typings"]
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.json"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "miniprogram_npm"
-  ]
+  "include": ["**/*.ts", "**/*.js", "**/*.json"],
+  "exclude": ["node_modules", "dist"]
 }
