@@ -98,17 +98,26 @@ Page({
     
     this.setData({ isAnimating: true });
     
-    this.getLocation();
+    this.getFuzzyLocation();
   },
 
   // 获取用户地理位置
-  getLocation() {
-    wx.getLocation({
-      type: 'wgs84',
-      success: (res) => {
-        wx.setStorageSync('userLocation', { lat: res.latitude, lng: res.longitude });
-        this.setData({ locationAuthorized: true });
-        this.startLoadingFlow(true);
+  getFuzzyLocation() {
+    wx.authorize({
+      scope: 'scope.userFuzzyLocation',
+      success: () => {
+        wx.getFuzzyLocation({
+          type: 'wgs84',
+          success: (res) => {
+            wx.setStorageSync('userLocation', { lat: res.latitude, lng: res.longitude });
+            this.setData({ locationAuthorized: true });
+            this.startLoadingFlow(true);
+          },
+          fail: () => {
+            this.setData({ locationAuthorized: false });
+            this.startLoadingFlow(false);
+          }
+        });
       },
       fail: () => {
         this.setData({ locationAuthorized: false });
