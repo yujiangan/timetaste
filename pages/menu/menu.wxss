@@ -240,18 +240,12 @@ page {
   display: flex;
   align-items: center;
   padding: 24rpx;
-  border-bottom: 1rpx solid #f0f0f0;
 }
 
 .section-title {
   font-size: 28rpx;
   font-weight: 600;
   color: #333;
-}
-
-/* 菜单列表 */
-.menu-list {
-  padding: 0 20rpx;
 }
 
 .menu-item {

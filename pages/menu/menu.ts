@@ -42,7 +42,7 @@ Page({
         dishNames: dishNames,
         dishCount: dishNames.length,
         dishDisplay: displayDishes,
-        restaurantName: item.restaurantName || '未识别到菜馆',
+        restaurantName: item.restaurantName || '未识别到餐厅',
         menuImage: item.menuImage || ''
       };
     });
@@ -191,7 +191,7 @@ Page({
       if (result.type === 'dish') {
         // 单一菜品
         mockResult = {
-          restaurantName: '未识别到菜馆',
+          restaurantName: '未识别到餐厅',
           type: 'dish',
           dishes: [{ name: result.singleDishName || '未知菜品' }]
         };
@@ -207,7 +207,7 @@ Page({
         }
         
         mockResult = {
-          restaurantName: result.restaurantName || '未识别到菜馆',
+          restaurantName: result.restaurantName || '未识别到餐厅',
           type: 'menu',
           dishes: result.menuItems.map((item: any) => ({ name: typeof item === 'string' ? item : item.name }))
         };
@@ -258,7 +258,7 @@ Page({
     // 构建菜单对象
     const newMenu = {
       id: `menu_${Date.now()}_001`,
-      restaurantName: this.data.resultData.restaurantName || '未识别到菜馆',
+      restaurantName: this.data.resultData.restaurantName || '未识别到餐厅',
       dishNames: dishNames,
       type: this.data.resultData.type || 'menu',
       savedTime: Date.now(),

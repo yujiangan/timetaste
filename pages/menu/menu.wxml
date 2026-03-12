@@ -36,7 +36,7 @@
     <view class="result-body">
       <view class="result-row">
         <text class="result-label">餐厅名称</text>
-        <text class="result-value">{{resultData.restaurantName || '未识别到菜馆'}}</text>
+        <text class="result-value">{{resultData.restaurantName || '未识别到餐厅'}}</text>
       </view>
       
       <view class="result-dishes-section" wx:if="{{resultData.dishes && resultData.dishes.length > 0}}">
