@@ -146,6 +146,13 @@ Page({
    * 清空所有历史记录
    */
   onConfirmDeleteTap() {
+    // 埋点：删除历史记录
+    const track = require('../../utils/track.js');
+    const deletedCount = this.data.historyList.length;
+    track.track(track.EventTypes.HISTORY_DELETE, {
+      deletedCount: deletedCount
+    });
+
     wx.setStorageSync('RecommendHistory', []); // 清空本地存储
     this.setData({
       showDeleteModal: false,

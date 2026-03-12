@@ -19,6 +19,7 @@ Page({
     errorDesc: '',                          // 错误描述
     locationAuthorized: false,              // 地理位置是否已授权
     historyList: [],                        // 历史记录列表
+    excludeDishes: [] as string[],         // 本次推荐中已出现的菜品（用于换一换时排除）
   },
 
   // 页面加载时触发
@@ -91,6 +92,10 @@ Page({
   onDiceTap() {
     if (this.data.isAnimating || this.data.showLoading || this.data.showResult || this.data.showError) return;
     
+    // 埋点：摇一摇
+    const track = require('../../utils/track.js');
+    track.track(track.EventTypes.HOME_SHAKE, {});
+    
     this.setData({ isAnimating: true });
     
     this.getLocation();
@@ -160,7 +165,8 @@ Page({
     }, 500);
     
     // 立即调用AI，和动画并行执行
-    this.callAIRecommend();
+    this.setData({ excludeDishes: [] });
+    this.callAIRecommend([]);
   },
 
   // 检查是否有历史偏好
@@ -176,11 +182,12 @@ Page({
   },
 
   // 调用AI获取美食推荐
-  async callAIRecommend() {
+  // excludeDishes: 需要排除的菜品数组
+  async callAIRecommend(excludeDishes: string[] = []) {
     try {
       const app = getApp() as any;
       const api = require('../../utils/api.js');
-      const result = await api.foodRecommend();
+      const result = await api.foodRecommend(excludeDishes);
       if (!result || !result.dishName) {
         this.handleError('推荐获取失败', '暂无合适的推荐，请重试');
         return;
@@ -212,6 +219,13 @@ Page({
 
   // 处理错误显示
   handleError(title: string, desc: string) {
+    // 埋点：推荐失败
+    const track = require('../../utils/track.js');
+    track.track(track.EventTypes.HOME_ERROR, {
+      errorTitle: title,
+      errorDesc: desc
+    });
+
     this.setData({
       showLoading: false,
       isAnimating: false,
@@ -223,6 +237,14 @@ Page({
 
   // 确认推荐结果
   onConfirmTap() {
+    // 埋点：就这个（采纳推荐）
+    const track = require('../../utils/track.js');
+    track.track(track.EventTypes.HOME_ADOPT, {
+      dishName: this.data.resultName,
+      category: this.data.resultCategory,
+      taste: this.data.resultTaste
+    });
+
     const historyData = wx.getStorageSync('RecommendHistory') || [];
     const newHistory = {
       id: `reco_${Date.now()}_001`,
@@ -254,6 +276,12 @@ Page({
       return;
     }
 
+    // 埋点：换一换
+    const track = require('../../utils/track.js');
+    track.track(track.EventTypes.HOME_NEXT, {
+      skippedDish: this.data.resultName
+    });
+
     const historyData = wx.getStorageSync('RecommendHistory') || [];
     const newHistory = {
       id: `reco_${Date.now()}_001`,
@@ -268,14 +296,16 @@ Page({
     
     this.loadHistoryData();
     
+    const newExcludeDishes = [...this.data.excludeDishes, this.data.resultName];
     this.setData({ 
       isCardVisible: false,
-      showResult: false
+      showResult: false,
+      excludeDishes: newExcludeDishes
     });
     
     setTimeout(() => {
       this.setData({ showLoading: true });
-      this.callAIRecommend();
+      this.callAIRecommend(newExcludeDishes);
     }, 350);
   },
 

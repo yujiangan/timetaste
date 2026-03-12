@@ -90,6 +90,10 @@ Page({
 
   // 选择图片
   chooseImageFile() {
+    // 埋点：上传菜单
+    const track = require('../../utils/track.js');
+    track.track(track.EventTypes.MENU_UPLOAD, {});
+
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
@@ -214,6 +218,13 @@ Page({
         showResult: true,
         resultData: mockResult
       });
+
+      // 埋点：识别成功
+      const track = require('../../utils/track.js');
+      track.track(track.EventTypes.MENU_RECOGNIZE, {
+        restaurantName: mockResult.restaurantName,
+        dishCount: mockResult.dishes.length
+      });
     } catch (error: any) {
       console.error('AI识别失败:', error);
       this.setData({
@@ -257,6 +268,14 @@ Page({
     const menuList = wx.getStorageSync('SavedMenuList') || [];
     const newMenuList = [newMenu, ...menuList];
     wx.setStorageSync('SavedMenuList', newMenuList);
+
+    // 埋点：保存菜单
+    const track = require('../../utils/track.js');
+    track.track(track.EventTypes.MENU_SAVE, {
+      restaurantName: newMenu.restaurantName,
+      dishCount: dishNames.length
+    });
+
     // 更新页面数据
     this.setData({
       showResult: false,

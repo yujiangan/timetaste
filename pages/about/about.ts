@@ -87,6 +87,13 @@ Page({
    */
   onSubmitFeedback() {
     console.log('提交反馈:', this.data.feedbackText);
+
+    // 埋点：提交反馈
+    const track = require('../../utils/track.js');
+    track.track(track.EventTypes.ABOUT_FEEDBACK, {
+      contentLength: this.data.feedbackText.length
+    });
+
     this.setData({
       showModal: false,
       feedbackText: '',

@@ -1,3 +1,11 @@
+// 环境变量配置
+const env = require('../env.js');
+
+// 获取 API Key
+function getApiKey() {
+  return env.apiKey || '';
+}
+
 // AI API 配置文件
 const API_CONFIG = {
   baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
@@ -14,8 +22,36 @@ const API_CONFIG = {
 // 美食推荐系统提示词
 const SYSTEM_PROMPT = `你是专业的美食推荐助手。根据用户的历史偏好和当前时间以及地理位置，推荐一道合适的菜品。
 
+推荐策略：
+1. 优先考虑当前时间段（早餐/午餐/下午茶/晚餐/夜宵）适合的菜品类型
+2. 参考用户的历史偏好，但不推荐最近3天内已经推荐过的菜品
+3. 尽量推荐不同类型的菜品，增加多样性
+4. 如果用户有上传菜单，优先从菜单中推荐
+
 输出必须是有效的JSON格式，如：
 {"dishName":"宫保鸡丁","dishCategory":"川菜, 麻辣, 下饭菜","recommendReason":"考虑到当前午餐和您的川菜偏好，这道宫保鸡丁是完美选择。美味可口，营养美味"}`;
+
+// 图片缓存相关
+const IMAGE_CACHE_KEY = "DishImageCache";
+
+// 获取图片缓存
+function getImageCache() {
+  const cache = wx.getStorageSync(IMAGE_CACHE_KEY) || {};
+  return cache;
+}
+
+// 保存图片到缓存
+function saveImageToCache(dishName, imageUrl) {
+  const cache = getImageCache();
+  cache[dishName] = imageUrl;
+  wx.setStorageSync(IMAGE_CACHE_KEY, cache);
+}
+
+// 从缓存获取图片URL
+function getImageFromCache(dishName) {
+  const cache = getImageCache();
+  return cache[dishName] || null;
+}
 
 // 菜单识别系统提示词
 const MENU_RECOGNITION_TEXT = `你是菜单识别助手。请仔细识别图片中的内容：
@@ -39,7 +75,8 @@ function getDishImageUrl(dishName) {
   return "";
 }
 // 构建美食推荐上下文（整合用户信息供AI参考）
-function buildFoodRecommendContext() {
+// excludeDishes: 需要排除的菜品数组（用于换一换时避免重复推荐）
+function buildFoodRecommendContext(excludeDishes = []) {
   const historyData = wx.getStorageSync("RecommendHistory") || [];
   const menuData = wx.getStorageSync("SavedMenuList") || [];
   // 1. 判断当前时间段
@@ -55,16 +92,17 @@ function buildFoodRecommendContext() {
   if (location) {
     locationStatus = "已获取地理位置";
   }
-  // 3. 用户偏好分析（取最近5条）
+  // 3. 用户偏好分析（取最近5条，排除已排除的菜品）
+  const recentHistory = historyData
+    .filter((item) => item.status === "adopted")
+    .slice(0, 5);
   const preferenceText =
-    historyData.length > 0
-      ? historyData
-          .slice(0, 5)
-          .map((item, index) => {
+    recentHistory.length > 0
+      ? recentHistory
+          .map((item) => {
             const date = new Date(item.createTime);
             const dateStr = `${date.getMonth() + 1}月${date.getDate()}日`;
-            const action = item.status === "adopted" ? "选择了" : "排除了";
-            return `${dateStr}${action}${item.dishName}（${(item.tags || []).join("、")}）`;
+            return `${dateStr}选择了${item.dishName}（${(item.tags || []).join("、")}）`;
           })
           .join("； ")
       : "无历史偏好";
@@ -77,8 +115,13 @@ function buildFoodRecommendContext() {
           })
           .join("； ")
       : "无上传菜单";
+  // 5. 排除菜品列表
+  const excludeText =
+    excludeDishes.length > 0
+      ? `本次推荐请排除以下菜品：${excludeDishes.join("、")}。这些菜品已经推荐过，请推荐其他不同的菜品。`
+      : "";
 
-  return `当前时间：${timePeriod}，${locationStatus}，用户历史偏好： ${preferenceText}； 已上传菜单列表： ${menuText}`;
+  return `当前时间：${timePeriod}，${locationStatus}，用户历史偏好： ${preferenceText}； 已上传菜单列表： ${menuText}。${excludeText}`;
 }
 
 /**
@@ -98,8 +141,6 @@ function callAI(
   isVision = false,
   imageBase64 = null,
 ) {
-  const app = getApp();
-
   let messages = [];
 
   if (isVision && imageBase64) {
@@ -133,7 +174,7 @@ function callAI(
       method: "POST",
       header: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${app.globalData.apiKey || ""}`,
+        Authorization: `Bearer ${getApiKey()}`,
       },
       data: {
         model: model,
@@ -189,8 +230,9 @@ function callAI(
 }
 
 // 美食推荐函数 - 调用AI推荐菜品
-function foodRecommend() {
-  const context = buildFoodRecommendContext();
+// excludeDishes: 需要排除的菜品数组（用于换一换时避免重复推荐）
+function foodRecommend(excludeDishes = []) {
+  const context = buildFoodRecommendContext(excludeDishes);
   return callAI(API_CONFIG.textModel, SYSTEM_PROMPT, context);
 }
 
@@ -205,10 +247,15 @@ function menuRecognition(imageBase64) {
   );
 }
 
-// 菜品图片生成函数 - 调用AI生成菜品图片
+// 菜品图片生成函数 - 调用AI生成菜品图片（带缓存）
 function getDishImage(dishName) {
   return new Promise((resolve, reject) => {
-    const app = getApp();
+    const cachedImage = getImageFromCache(dishName);
+    if (cachedImage) {
+      resolve({ dishImageUrl: cachedImage });
+      return;
+    }
+
     const prompt = `A delicious ${dishName} on a white plate, professional food photography, warm lighting, appetizing, high quality, close-up shot`;
 
     wx.request({
@@ -216,7 +263,7 @@ function getDishImage(dishName) {
       method: "POST",
       header: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${app.globalData.apiKey || ""}`,
+        Authorization: `Bearer ${getApiKey()}`,
       },
       data: {
         model: API_CONFIG.imageModel,
@@ -243,6 +290,7 @@ function getDishImage(dishName) {
           imageUrl = res.data.output.choices[0].message.content[0].image || "";
         }
         if (res.statusCode === 200 && imageUrl) {
+          saveImageToCache(dishName, imageUrl);
           resolve({ dishImageUrl: imageUrl });
         } else {
           const errMsg =

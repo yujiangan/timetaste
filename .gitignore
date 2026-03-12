@@ -7,3 +7,4 @@ miniprogram_npm/
 *.tmp
 .DS_Store
 *.md
+env.js
